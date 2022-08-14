@@ -2,6 +2,7 @@ package com.mominulcse7.githubclone.features.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import com.mominulcse7.githubclone.features.model.RepositoryModelResponse
+import com.mominulcse7.githubclone.features.model.SearchUrlModel
 import com.mominulcse7.githubclone.network.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -11,8 +12,15 @@ class HomeViewModel @Inject constructor(private val apiService: ApiService) : Ba
 
     val liveRepositoryModelResponse = MutableLiveData<RepositoryModelResponse>()
 
-    fun getRepoList(searchKey: String, pageNumber: Int, perPage: Int, orderBy: String, sortBy: String) {
-        getResponse(apiService::getRepositoryList, searchKey, pageNumber.toString(), perPage.toString(), orderBy, sortBy) {
+    fun getRepoList(sModel: SearchUrlModel) {
+        getResponse(
+            apiService::getRepositoryList,
+            sModel.searchKey,
+            sModel.currentPage.toString(),
+            sModel.itemPerPage.toString(),
+            sModel.orderBy,
+            sModel.sortBy
+        ) {
             liveRepositoryModelResponse.value = it
         }
     }

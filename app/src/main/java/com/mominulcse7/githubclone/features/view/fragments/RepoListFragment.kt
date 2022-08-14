@@ -6,61 +6,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.mominulcse7.githubclone.R
 import com.mominulcse7.githubclone.databinding.FragmentRepoListBinding
 import com.mominulcse7.githubclone.features.model.RepositoryModel
-import com.mominulcse7.githubclone.features.view.adapters.RepoListAdapter
+import com.mominulcse7.githubclone.features.model.SearchUrlModel
+import com.mominulcse7.githubclone.features.view.adapters.RepoAdapter
 import com.mominulcse7.githubclone.features.viewModel.HomeViewModel
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
 import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
 import com.mominulcse7.githubclone.utils.closeKeyboard
-import com.mominulcse7.githubclone.utils.logPrint
 import com.mominulcse7.githubclone.utils.setToolbarTitle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoListAdapterListener {
+class RepoListFragment : Fragment(), View.OnClickListener {
 
     private lateinit var pDialog: DDProgressBarDialog
     private lateinit var activity: Activity
-    private lateinit var fragment: Fragment
     private lateinit var binding: FragmentRepoListBinding
 
-    private lateinit var adapter: RepoListAdapter
+    private lateinit var adapter: RepoAdapter
     private var recyclerView: RecyclerView? = null
-
     private var listRepo = ArrayList<RepositoryModel>()
 
-    private val viewModel by viewModels<HomeViewModel>()
-
-    private var searchKey = "android"
-    private var currentPage = 1
-    private var itemPerPage = 50
-    private var sortBy = "star"
-    private var orderBy = "asc"
-    private var totalPage = 0L
+    private var searchModel = SearchUrlModel()
     private var msg = ""
+
+    private val viewModel by viewModels<HomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = requireActivity()
-        fragment = this
         pDialog = DDProgressBarDialog(activity)
-
-        loadFirstList()
     }
 
     override fun onCreateView(lif: LayoutInflater, vg: ViewGroup?, sis: Bundle?): View {
-        binding = DataBindingUtil.inflate(lif, R.layout.fragment_repo_list, vg, false)
+        binding = FragmentRepoListBinding.inflate(lif, vg, false)
         activity.setToolbarTitle(activity.resources.getString(R.string.app_name))
         initiateView()
         observeViewModel()
+        loadFirstList()
         return binding.root
     }
 
@@ -68,15 +57,14 @@ class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoL
 
         recyclerView = binding.recyclerView
         recyclerView?.setHasFixedSize(true)
-        adapter = RepoListAdapter(listRepo, fragment, activity)
+        adapter = RepoAdapter(::onDetailsClicked)
         recyclerView?.adapter = adapter
-        adapter.notifyDataSetChanged()
 
         recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (totalPage > currentPage) {
+                    if (searchModel.totalPage > searchModel.currentPage) {
                         loadList()
                     }
                 }
@@ -94,13 +82,13 @@ class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoL
 
                 if (it.listRepo != null && it.listRepo?.size!! > 0) {
 
-                    if (currentPage <= 1L)
+                    if (searchModel.currentPage <= 1L)
                         listRepo = it.listRepo!!
                     else
                         listRepo.addAll(it.listRepo!!)
 
                     try {
-                        totalPage = it.totalCount / itemPerPage + 1
+                        searchModel.totalPage = it.totalCount / searchModel.itemPerPage + 1
                     } catch (e: Exception) {
                     }
                 }
@@ -110,20 +98,16 @@ class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoL
     }
 
     private fun loadFirstList() {
-
-        msg = activity.resources.getString(R.string.loading_data_plz_wait)
         listRepo = ArrayList()
-        totalPage = 1
-        currentPage = 0
-        itemPerPage = 50
+        searchModel = SearchUrlModel()
         loadList()
     }
 
     private fun loadList() {
         msg = activity.resources.getString(R.string.loading_data_plz_wait)
         pDialog.show()
-        currentPage++
-        viewModel.getRepoList(searchKey, currentPage, itemPerPage,  orderBy,sortBy )
+        searchModel.currentPage = searchModel.currentPage + 1
+        viewModel.getRepoList(searchModel)
     }
 
     private fun setList() {
@@ -134,7 +118,7 @@ class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoL
             binding.tvNoDataTitle.text = msg
         }
 
-        adapter.setItems(listRepo)
+        adapter.submitList(listRepo)
         adapter.notifyDataSetChanged()
     }
 
@@ -148,7 +132,7 @@ class RepoListFragment : Fragment(), View.OnClickListener, RepoListAdapter.RepoL
         }
     }
 
-    override fun onDetailsView(item: View, cModel: RepositoryModel, position: Int) {
+    private fun onDetailsClicked(cModel: RepositoryModel) {
         val bundle = Bundle()
         bundle.putString(INTENT_DATA, Gson().toJson(cModel))
         findNavController().navigate(R.id.repoDetailsFragment, bundle)

@@ -7,4 +7,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#212F7A</color>
+    <color name="colorAccent">#E91E63</color>
+
+    <color name="cToolbar">#3F51B5</color>
+    <color name="cToolbarText">#FFFFFF</color>
+    <color name="cIcon">#FFFFFF</color>
+    <color name="cIconColor">#673AB7</color>
+    <color name="cFragmentBackground">#FBFAFA</color>
+
+    <color name="cWhite">#FFFFFF</color>
+    <color name="cRed">#FA2818</color>
+    <color name="cBlack">#000000</color>
+    <color name="cBlue">#2196F3</color>
+    <color name="cOrange">#FF9800</color>
+    <color name="cAlert">#FF9800</color>
+    <color name="transparent100">#03FFFFFF</color>
+    <color name="cBorder">#858383</color>
+    <color name="cCartItem">#F7FAF7</color>
+
 </resources>

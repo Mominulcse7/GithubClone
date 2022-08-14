@@ -4,7 +4,7 @@ class SearchUrlModel {
     var searchKey = "android"
     var currentPage = 0
     var itemPerPage = 50
-    var sortBy = "star"
-    var orderBy = "asc"
+    var sortBy = "stars"
+    var orderBy = "desc"
     var totalPage = 1L
 }

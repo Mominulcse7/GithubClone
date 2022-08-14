@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/mSearch"
+            android:icon="@drawable/ic_search"
+            android:title="@string/search"
+            app:actionViewClass="androidx.appcompat.widget.SearchView"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/mSort"
+            android:icon="@drawable/ic_filter_color2"
+            android:title="@string/filter"
+            app:showAsAction="ifRoom">
+
+            <menu>
+                <item
+                    android:id="@+id/sByMostStar"
+                    android:title="@string/most_stars"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/sByFewStar"
+                    android:title="@string/fewest_star"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/sByMostFork"
+                    android:title="@string/most_forks"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/sByFewFork"
+                    android:title="@string/fewest_forks"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/sByRecentUpdate"
+                    android:title="@string/recent_update"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/sByLeastRecentUpdate"
+                    android:title="@string/least_recent_update"
+                    app:showAsAction="ifRoom" />
+            </menu>
+
+        </item>
+
+    </group>
+
+</menu>

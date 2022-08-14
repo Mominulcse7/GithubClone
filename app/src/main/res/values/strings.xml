@@ -28,5 +28,14 @@
     <string name="watchers_count">watchers count</string>
     <string name="_0">0</string>
     <string name="fork_count">Fork Count</string>
+    <string name="filter">Filter</string>
+    <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
+    <string name="most_stars">Most Stars</string>
+    <string name="least_recent_update">Least Recent Update</string>
+    <string name="recent_update">Recent Update</string>
+    <string name="fewest_forks">Fewest Forks</string>
+    <string name="most_forks">Most Forks</string>
+    <string name="fewest_star">Fewest Star</string>
 
 </resources>

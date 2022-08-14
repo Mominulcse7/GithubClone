@@ -6,12 +6,12 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("/search/repositories?type=Repositories")
+    @GET("/search/repositories")
     suspend fun getRepositoryList(
         @Query("q") searchKey: String,
         @Query("page") pageNumber: String,
         @Query("per_page") perPage: String,
-        @Query("o") orderBy: String,
         @Query("s") sortBy: String,
+        @Query("o") orderBy: String
     ): RepositoryModelResponse
 }

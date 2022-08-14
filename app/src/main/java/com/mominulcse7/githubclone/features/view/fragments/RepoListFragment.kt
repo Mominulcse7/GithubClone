@@ -1,12 +1,17 @@
 package com.mominulcse7.githubclone.features.view.fragments
 
+import android.R.attr.button
 import android.app.Activity
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -16,11 +21,16 @@ import com.mominulcse7.githubclone.features.model.RepositoryModel
 import com.mominulcse7.githubclone.features.model.SearchUrlModel
 import com.mominulcse7.githubclone.features.view.adapters.RepoAdapter
 import com.mominulcse7.githubclone.features.viewModel.HomeViewModel
+import com.mominulcse7.githubclone.sessions.TempSharePref
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
 import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
 import com.mominulcse7.githubclone.utils.closeKeyboard
+import com.mominulcse7.githubclone.utils.logPrint
 import com.mominulcse7.githubclone.utils.setToolbarTitle
+import com.mominulcse7.githubclone.utils.toastShow
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class RepoListFragment : Fragment(), View.OnClickListener {
@@ -36,6 +46,9 @@ class RepoListFragment : Fragment(), View.OnClickListener {
     private var searchModel = SearchUrlModel()
     private var msg = ""
 
+    @Inject
+    lateinit var tempSharePref: TempSharePref
+
     private val viewModel by viewModels<HomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +61,7 @@ class RepoListFragment : Fragment(), View.OnClickListener {
         binding = FragmentRepoListBinding.inflate(lif, vg, false)
         activity.setToolbarTitle(activity.resources.getString(R.string.app_name))
         initiateView()
+        createMenu()
         observeViewModel()
         loadFirstList()
         return binding.root
@@ -99,7 +113,10 @@ class RepoListFragment : Fragment(), View.OnClickListener {
 
     private fun loadFirstList() {
         listRepo = ArrayList()
-        searchModel = SearchUrlModel()
+        searchModel.currentPage = 0
+        searchModel.totalPage = 1L
+        searchModel.sortBy = tempSharePref.getSortBy()!!
+        searchModel.orderBy = tempSharePref.getOrderBy()!!
         loadList()
     }
 
@@ -111,6 +128,8 @@ class RepoListFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setList() {
+        activity.closeKeyboard()
+
         if (listRepo.size > 0) {
             binding.llNoData.visibility = View.GONE
         } else {
@@ -136,5 +155,71 @@ class RepoListFragment : Fragment(), View.OnClickListener {
         val bundle = Bundle()
         bundle.putString(INTENT_DATA, Gson().toJson(cModel))
         findNavController().navigate(R.id.repoDetailsFragment, bundle)
+    }
+
+    private fun createMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_filter, menu)
+                menu.findItem(R.id.mSearch).isVisible = true
+                menu.findItem(R.id.mSort).isVisible = true
+
+                val searchView = menu.findItem(R.id.mSearch).actionView as SearchView
+                searchView.queryHint = requireActivity().resources.getString(R.string.search)
+                searchView.isSubmitButtonEnabled = false
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(s: String): Boolean {
+                        searchModel.searchKey = s
+                        loadFirstList()
+                        return false
+                    }
+
+                    override fun onQueryTextChange(s: String): Boolean {
+//                        searchModel.searchKey = s
+                        return false
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.sByMostStar -> {
+                        tempSharePref.saveSortBy("stars")
+                        tempSharePref.saveOrderBy("desc")
+                        loadFirstList()
+                    }
+                    R.id.sByFewStar -> {
+                        tempSharePref.saveSortBy("stars")
+                        tempSharePref.saveOrderBy("asc")
+                        loadFirstList()
+                    }
+                    R.id.sByMostFork -> {
+                        tempSharePref.saveSortBy("forks")
+                        tempSharePref.saveOrderBy("desc")
+                        loadFirstList()
+                    }
+                    R.id.sByFewFork -> {
+                        tempSharePref.saveSortBy("forks")
+                        tempSharePref.saveOrderBy("asc")
+                        loadFirstList()
+                    }
+                    R.id.sByRecentUpdate -> {
+                        tempSharePref.saveSortBy("updated")
+                        tempSharePref.saveOrderBy("desc")
+                        loadFirstList()
+                    }
+                    R.id.sByLeastRecentUpdate -> {
+                        tempSharePref.saveSortBy("updated")
+                        tempSharePref.saveOrderBy("asc")
+                        loadFirstList()
+                    }
+                }
+
+                activity.closeKeyboard()
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 }

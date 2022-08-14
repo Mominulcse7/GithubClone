@@ -130,8 +130,8 @@ fun getCurrentSqlTime(): String {
 }
 
 fun getSqlToDDMMYYHHSS(inputDate: String?): String? {
-    val dbFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-    val newFormat = SimpleDateFormat("dd/MMM/yy hh:mm a", Locale.US)
+    val dbFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+    val newFormat = SimpleDateFormat("dd-mm-yy hh:mm a", Locale.US)
     var strDateTime = inputDate
     var date: Date? = null
     try {

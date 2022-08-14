@@ -14,6 +14,7 @@ import com.mominulcse7.githubclone.databinding.FragmentRepoListBinding
 import com.mominulcse7.githubclone.features.model.RepositoryModel
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
 import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
+import com.mominulcse7.githubclone.utils.getSqlToDDMMYYHHSS
 import com.mominulcse7.githubclone.utils.setToolbarTitle
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -62,6 +63,7 @@ class RepoDetailsFragment : Fragment() {
             binding.tvDescription.text = repoModel?.description
             binding.tvStarCount.text = repoModel?.starCount
             binding.tvForkCount.text = repoModel?.forksCount
+            binding.tvLastUpdate.text = "Updated on " + getSqlToDDMMYYHHSS(repoModel?.updatedAt)
 
 
             try {

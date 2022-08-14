@@ -6,4 +6,7 @@ object ConstantKeys {
     const val SORT_ORDER = "sortingOrder"  //asc, desc
     const val SORT_BY = "sortBy"   // star, date
     const val INTENT_DATA = "intentData"   // star, date
+
+    const val ROOM_DB_NAME = "GithubDB"   // star, date
+    const val ROOM_DB_VERSION = 1   // star, date
 }

@@ -1,20 +1,39 @@
 package com.mominulcse7.githubclone.features.viewModel
 
 import androidx.lifecycle.MutableLiveData
-import com.mominulcse7.githubclone.features.model.RepositoryModelResponse
+import androidx.lifecycle.viewModelScope
+import com.mominulcse7.githubclone.db.GithubDB
+import com.mominulcse7.githubclone.features.model.RepositoryModel
 import com.mominulcse7.githubclone.features.model.SearchUrlModel
 import com.mominulcse7.githubclone.network.ApiService
-import com.mominulcse7.githubclone.utils.logPrint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val apiService: ApiService) : BaseViewModel() {
+class HomeViewModel @Inject constructor(
+    private val apiService: ApiService,
+    private val githubDB: GithubDB
+) : BaseViewModel() {
 
-    val liveRepositoryModelResponse = MutableLiveData<RepositoryModelResponse>()
+    val liveRepositoryModelResponse = MutableLiveData<ArrayList<RepositoryModel>>()
+    val liveTotalItemCount = MutableLiveData<Long>()
 
     fun getRepoList(sModel: SearchUrlModel) {
-        logPrint(sModel)
+        viewModelScope.launch {
+            val listRepo =
+                githubDB.getGithubDao().getRepositoryListDB(
+                    sModel.searchKey,
+                    sModel.currentPage.toString(),
+                    sModel.itemPerPage.toString(),
+                    sModel.sortBy,
+                    sModel.orderBy
+                )
+
+            liveRepositoryModelResponse.value = listRepo
+            liveTotalItemCount.value = listRepo.size.toLong()
+        }
+
         getResponse(
             apiService::getRepositoryList,
             sModel.searchKey,
@@ -23,7 +42,11 @@ class HomeViewModel @Inject constructor(private val apiService: ApiService) : Ba
             sModel.sortBy,
             sModel.orderBy
         ) {
-            liveRepositoryModelResponse.value = it
+            viewModelScope.launch {
+                githubDB.getGithubDao().addGithubRepoList(it.listRepo!!)
+            }
+            liveRepositoryModelResponse.value = it.listRepo
+            liveTotalItemCount.value = it.totalCount
         }
     }
 }

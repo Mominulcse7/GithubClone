@@ -1,11 +1,8 @@
 package com.mominulcse7.githubclone.features.view.fragments
 
-import android.R.attr.button
 import android.app.Activity
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
-import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -25,15 +22,13 @@ import com.mominulcse7.githubclone.sessions.TempSharePref
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
 import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
 import com.mominulcse7.githubclone.utils.closeKeyboard
-import com.mominulcse7.githubclone.utils.logPrint
 import com.mominulcse7.githubclone.utils.setToolbarTitle
-import com.mominulcse7.githubclone.utils.toastShow
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class RepoListFragment : Fragment(), View.OnClickListener {
+class RepoListFragment : Fragment() {
 
     private lateinit var pDialog: DDProgressBarDialog
     private lateinit var activity: Activity
@@ -85,27 +80,22 @@ class RepoListFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        binding.vRoot.setOnClickListener(this)
     }
 
     private fun observeViewModel() {
+
+        viewModel.liveTotalItemCount.observe(viewLifecycleOwner) {
+            searchModel.totalPage = it / searchModel.itemPerPage + 1
+        }
+
         viewModel.liveRepositoryModelResponse.observe(viewLifecycleOwner) {
             pDialog.dismiss()
             if (it != null) {
                 msg = activity.resources.getString(R.string.no_repository_found)
-
-                if (it.listRepo != null && it.listRepo?.size!! > 0) {
-
-                    if (searchModel.currentPage <= 1L)
-                        listRepo = it.listRepo!!
-                    else
-                        listRepo.addAll(it.listRepo!!)
-
-                    try {
-                        searchModel.totalPage = it.totalCount / searchModel.itemPerPage + 1
-                    } catch (e: Exception) {
-                    }
-                }
+                if (searchModel.currentPage <= 1L)
+                    listRepo = it
+                else
+                    listRepo.addAll(it)
             }
             setList()
         }
@@ -139,16 +129,6 @@ class RepoListFragment : Fragment(), View.OnClickListener {
 
         adapter.submitList(listRepo)
         adapter.notifyDataSetChanged()
-    }
-
-    override fun onClick(v: View) {
-        activity.closeKeyboard()
-
-        when (v.id) {
-            R.id.vRoot -> {
-//                findNavController().navigate(R.id.repoDetailsFragment)
-            }
-        }
     }
 
     private fun onDetailsClicked(cModel: RepositoryModel) {

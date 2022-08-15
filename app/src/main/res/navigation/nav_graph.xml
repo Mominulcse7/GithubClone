@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/repoListFragment"
-        android:name="com.mominulcse7.githubclone.features.view.fragments.RepoListFragment"
+        android:name="com.mominulcse7.githubclone.view.fragments.RepoListFragment"
         android:label="RepoListFragment" >
         <action
             android:id="@+id/action_repoListFragment_to_repoDetailsFragment"
@@ -15,6 +15,6 @@
 
     <fragment
         android:id="@+id/repoDetailsFragment"
-        android:name="com.mominulcse7.githubclone.features.view.fragments.RepoDetailsFragment"
+        android:name="com.mominulcse7.githubclone.view.fragments.RepoDetailsFragment"
         android:label="RepoDetailsFragment" />
 </navigation>

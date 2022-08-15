@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.depInjection
+package com.mominulcse7.githubclone.di
 
 
 import com.mominulcse7.githubclone.BuildConfig
@@ -8,12 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 @InstallIn(SingletonComponent::class)
@@ -21,13 +18,13 @@ import java.util.concurrent.TimeUnit
 class NetworkModule {
 
     @Provides
-    fun providesRetrofit(): Retrofit.Builder {
+    fun providesRetrofit(httpLoggingInterceptor: HttpLoggingInterceptor): Retrofit {
 
         val httpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor(printApiReqResponse())
+            .addInterceptor(httpLoggingInterceptor)
 
         val okHttpClient = httpClient.build()
 
@@ -35,9 +32,11 @@ class NetworkModule {
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
+            .build()
     }
 
-    private fun printApiReqResponse(): HttpLoggingInterceptor {
+    @Provides
+    fun printApiReqResponse(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message: String? ->
             if (BuildConfig.DEBUG)
                 println(message)
@@ -47,8 +46,8 @@ class NetworkModule {
     }
 
     @Provides
-    fun providesUserAPI(retrofitBuilder: Retrofit.Builder): ApiService {
-        return retrofitBuilder.build().create(ApiService::class.java)
+    fun providesUserAPI(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 
 

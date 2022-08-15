@@ -1,6 +1,6 @@
 package com.mominulcse7.githubclone.network
 
-import com.mominulcse7.githubclone.features.model.RepositoryModelResponse
+import com.mominulcse7.githubclone.model.RepositoryModelResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

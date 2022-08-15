@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.viewModel
+package com.mominulcse7.githubclone.viewModel
 
 import android.app.Application
 import android.widget.Toast

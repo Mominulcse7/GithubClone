@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.model
+package com.mominulcse7.githubclone.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

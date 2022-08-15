@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mominulcse7.githubclone.features.model.OwnerModel
-import com.mominulcse7.githubclone.features.model.RepositoryModel
+import com.mominulcse7.githubclone.model.OwnerModel
+import com.mominulcse7.githubclone.model.RepositoryModel
 
 @Dao
 interface GithubDao {
@@ -22,8 +22,8 @@ interface GithubDao {
                 + " CASE WHEN ( :orderBy = 'desc' AND :sortBy= 'stars') THEN stargazers_count END DESC, "
                 + " CASE WHEN ( :orderBy = 'asc' AND :sortBy= 'forks') THEN forks_count END ASC, "
                 + " CASE WHEN ( :orderBy = 'desc' AND :sortBy= 'forks') THEN forks_count END DESC, "
-                + " CASE WHEN ( :orderBy = 'asc' AND :sortBy= 'updated') THEN updated_at END ASC, "
-                + " CASE WHEN ( :orderBy = 'desc' AND :sortBy= 'updated') THEN updated_at END DESC "
+                + " CASE WHEN ( :orderBy = 'asc' AND :sortBy= 'updated') THEN dateTime(updated_at) END ASC, "
+                + " CASE WHEN ( :orderBy = 'desc' AND :sortBy= 'updated') THEN dateTime(updated_at) END DESC "
     )
     suspend fun getRepositoryListDB(
         searchKey: String,

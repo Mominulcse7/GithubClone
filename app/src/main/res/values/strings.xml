@@ -10,7 +10,7 @@
     <string name="d_open">open</string>
     <string name="d_close">close</string>
 
-    <string name="no_response_host">No response from KinYards. Try again after sometime or call to KinYards customer service.</string>
+    <string name="no_response_host">No response from Github. Try again after sometime.</string>
     <string name="unknown_error">Unknown error. Try again!.</string>
     <string name="unauthorized_error">Unauthorized error!.</string>
     <string name="request_rejected">Request rejected!.</string>
@@ -37,6 +37,6 @@
     <string name="fewest_forks">Fewest Forks</string>
     <string name="most_forks">Most Forks</string>
     <string name="fewest_star">Fewest Star</string>
-    <string name="updated_on">\"Updated on \"</string>
+    <string name="updated_on">Updated on %s</string>
 
 </resources>

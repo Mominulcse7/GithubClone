@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.view.fragments
+package com.mominulcse7.githubclone.view.fragments
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.mominulcse7.githubclone.R
 import com.mominulcse7.githubclone.databinding.FragmentRepoListBinding
-import com.mominulcse7.githubclone.features.model.RepositoryModel
-import com.mominulcse7.githubclone.features.model.SearchUrlModel
-import com.mominulcse7.githubclone.features.view.adapters.RepoAdapter
-import com.mominulcse7.githubclone.features.viewModel.HomeViewModel
+import com.mominulcse7.githubclone.model.RepositoryModel
+import com.mominulcse7.githubclone.model.SearchUrlModel
+import com.mominulcse7.githubclone.view.adapters.RepoListAdapter
+import com.mominulcse7.githubclone.viewModel.HomeViewModel
 import com.mominulcse7.githubclone.sessions.TempSharePref
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
 import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
@@ -34,7 +34,7 @@ class RepoListFragment : Fragment() {
     private lateinit var activity: Activity
     private lateinit var binding: FragmentRepoListBinding
 
-    private lateinit var adapter: RepoAdapter
+    private lateinit var adapter: RepoListAdapter
     private var recyclerView: RecyclerView? = null
     private var listRepo = ArrayList<RepositoryModel>()
 
@@ -50,6 +50,8 @@ class RepoListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity = requireActivity()
         pDialog = DDProgressBarDialog(activity)
+        viewModel.application = activity.application
+        loadFirstList()
     }
 
     override fun onCreateView(lif: LayoutInflater, vg: ViewGroup?, sis: Bundle?): View {
@@ -58,17 +60,12 @@ class RepoListFragment : Fragment() {
         initiateView()
         createMenu()
         observeViewModel()
-        loadFirstList()
         return binding.root
     }
 
     private fun initiateView() {
 
         recyclerView = binding.recyclerView
-        recyclerView?.setHasFixedSize(true)
-        adapter = RepoAdapter(::onDetailsClicked)
-        recyclerView?.adapter = adapter
-
         recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -85,26 +82,26 @@ class RepoListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.application = activity.application
         viewModel.liveTotalItemCount.observe(viewLifecycleOwner) {
+            searchModel.totalItem = it
             searchModel.totalPage = it / searchModel.itemPerPage + 1
         }
 
         viewModel.liveRepositoryModelResponse.observe(viewLifecycleOwner) {
             pDialog.dismiss()
-            if (it != null) {
-                msg = activity.resources.getString(R.string.no_repository_found)
-                if (searchModel.currentPage <= 1L)
-                    listRepo = it
-                else
-                    listRepo.addAll(it)
-            }
+            msg = activity.resources.getString(R.string.no_repository_found)
+            if (searchModel.currentPage <= 1L)
+                listRepo = it
+            else
+                listRepo.addAll(it)
+
             setList()
         }
     }
 
     private fun loadFirstList() {
         listRepo = ArrayList()
+
         searchModel.currentPage = 0
         searchModel.totalPage = 1L
         searchModel.sortBy = tempSharePref.getSortBy()!!
@@ -128,8 +125,11 @@ class RepoListFragment : Fragment() {
             binding.llNoData.visibility = View.VISIBLE
             binding.tvNoDataTitle.text = msg
         }
-
-        adapter.submitList(listRepo)
+        if (searchModel.currentPage == 1) {
+            adapter = RepoListAdapter(::onDetailsClicked)
+            recyclerView?.adapter = adapter
+        }
+        adapter.setList(listRepo)
         adapter.notifyDataSetChanged()
     }
 

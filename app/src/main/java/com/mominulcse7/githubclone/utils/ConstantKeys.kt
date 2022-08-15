@@ -8,5 +8,5 @@ object ConstantKeys {
     const val INTENT_DATA = "intentData"   // star, date
 
     const val ROOM_DB_NAME = "GithubDB"   // star, date
-    const val ROOM_DB_VERSION = 4   // star, date
+    const val ROOM_DB_VERSION = 6  // star, date
 }

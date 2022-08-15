@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.view.fragments
+package com.mominulcse7.githubclone.view.fragments
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,14 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import com.google.gson.Gson
 import com.mominulcse7.githubclone.R
 import com.mominulcse7.githubclone.databinding.FragmentRepoDetailsBinding
-import com.mominulcse7.githubclone.databinding.FragmentRepoListBinding
-import com.mominulcse7.githubclone.features.model.RepositoryModel
+import com.mominulcse7.githubclone.model.RepositoryModel
 import com.mominulcse7.githubclone.utils.ConstantKeys.INTENT_DATA
-import com.mominulcse7.githubclone.utils.DotsProgressBar.DDProgressBarDialog
 import com.mominulcse7.githubclone.utils.getSqlToDDMMYYHHSS
 import com.mominulcse7.githubclone.utils.setToolbarTitle
 import com.squareup.picasso.Callback
@@ -56,30 +53,34 @@ class RepoDetailsFragment : Fragment() {
 
     private fun setData() {
 
-        if (repoModel != null) {
-//            binding.tvOwnerName.text = repoModel?.ownerModel?.name
-//            binding.tvOwnerDescription.text = repoModel?.ownerModel?.description
-            binding.tvRepoName.text = repoModel?.full_name
-            binding.tvDescription.text = repoModel?.description
-            binding.tvStarCount.text = repoModel?.stargazers_count.toString()
-            binding.tvForkCount.text = repoModel?.forks_count.toString()
-            binding.tvLastUpdate.text = activity.resources.getString(R.string.updated_on) + getSqlToDDMMYYHHSS(repoModel?.updated_at)
+        with(binding) {
+            if (repoModel != null) {
+                tvOwnerName.text = repoModel?.ownerModel?.name
+                tvOwnerDescription.text = repoModel?.ownerModel?.description
+                tvRepoName.text = repoModel?.full_name
+                tvDescription.text = repoModel?.description
+                tvStarCount.text = repoModel?.stargazers_count.toString()
+                tvForkCount.text = repoModel?.forks_count.toString()
+                tvLastUpdate.text = tvLastUpdate.context.getString(
+                    R.string.updated_on,
+                    getSqlToDDMMYYHHSS(repoModel?.updated_at)
+                )
 
+                try {
+                    Picasso.get().load(repoModel?.ownerModel?.avatarUrl)
+                        .into(civProfile, object : Callback {
+                            override fun onSuccess() {
+                                civProfile.visibility = View.VISIBLE
+                            }
 
-//            try {
-//                Picasso.get().load(repoModel?.ownerModel?.avatarUrl)
-//                    .into(binding.civProfile, object : Callback {
-//                        override fun onSuccess() {
-//                            binding.civProfile.visibility = View.VISIBLE
-//                        }
-//
-//                        override fun onError(e: java.lang.Exception?) {
-//                            binding.civProfile.visibility = View.INVISIBLE
-//                        }
-//                    })
-//            } catch (e: Exception) {
-//                binding.civProfile.visibility = View.INVISIBLE
-//            }
+                            override fun onError(e: java.lang.Exception?) {
+                                civProfile.visibility = View.INVISIBLE
+                            }
+                        })
+                } catch (e: Exception) {
+                    civProfile.visibility = View.INVISIBLE
+                }
+            }
         }
 
     }

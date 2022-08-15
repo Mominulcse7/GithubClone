@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.view.activities
+package com.mominulcse7.githubclone.view.activities
 
 import android.content.Intent
 import android.os.Bundle

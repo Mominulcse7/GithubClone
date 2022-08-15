@@ -1,4 +1,4 @@
-package com.mominulcse7.githubclone.features.model
+package com.mominulcse7.githubclone.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

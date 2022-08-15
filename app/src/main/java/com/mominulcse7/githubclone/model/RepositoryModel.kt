@@ -1,7 +1,9 @@
-package com.mominulcse7.githubclone.features.model
+package com.mominulcse7.githubclone.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -36,7 +38,7 @@ class RepositoryModel {
     @SerializedName("stargazers_count")
     var stargazers_count: Long? = 0L
 
-//    @SerializedName("owner")
-//    @Expose
-//    var ownerModel: OwnerModel? = null
+    @SerializedName("owner")
+    @Embedded(prefix = "owner_")
+    var ownerModel: OwnerModel? = null
 }

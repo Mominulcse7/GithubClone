@@ -27,23 +27,23 @@ class HomeViewModel @Inject constructor(
     val liveTotalItemCount = MutableLiveData<Long>()
 
     fun getRepoList(sModel: SearchUrlModel) {
-//        if (ctx.haveNetwork()) {
-//            getResponse(
-//                apiService::getRepositoryList,
-//                sModel.searchKey,
-//                sModel.currentPage.toString(),
-//                sModel.itemPerPage.toString(),
-//                sModel.sortBy,
-//                sModel.orderBy
-//            ) {
-//                //save list in room db
-//                viewModelScope.launch {
-//                    githubDB.getGithubDao().addGithubRepoList(it.listRepo!!)
-//                }
-//                liveTotalItemCount.value = it.totalCount
-//                liveRepositoryModelResponse.value = it.listRepo
-//            }
-//        } else {
+        if (ctx.haveNetwork()) {
+            getResponse(
+                apiService::getRepositoryList,
+                sModel.searchKey,
+                sModel.currentPage.toString(),
+                sModel.itemPerPage.toString(),
+                sModel.sortBy,
+                sModel.orderBy
+            ) {
+                //save list in room db
+                viewModelScope.launch {
+                    githubDao.addGithubRepoList(it.listRepo!!)
+                }
+                liveTotalItemCount.value = it.totalCount
+                liveRepositoryModelResponse.value = it.listRepo
+            }
+        } else {
 
             viewModelScope.launch {
                 val listRepo =
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
 
                 liveTotalItemCount.value = listRepo?.size?.toLong()
                 liveRepositoryModelResponse.value = (listRepo as ArrayList<RepositoryModel>?)!!
-//            }
+            }
         }
     }
 }

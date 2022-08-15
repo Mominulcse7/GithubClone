@@ -57,29 +57,29 @@ class RepoDetailsFragment : Fragment() {
     private fun setData() {
 
         if (repoModel != null) {
-            binding.tvOwnerName.text = repoModel?.ownerModel?.name
-            binding.tvOwnerDescription.text = repoModel?.ownerModel?.description
-            binding.tvRepoName.text = repoModel?.fullName
+//            binding.tvOwnerName.text = repoModel?.ownerModel?.name
+//            binding.tvOwnerDescription.text = repoModel?.ownerModel?.description
+            binding.tvRepoName.text = repoModel?.full_name
             binding.tvDescription.text = repoModel?.description
-            binding.tvStarCount.text = repoModel?.starCount
-            binding.tvForkCount.text = repoModel?.forksCount
-            binding.tvLastUpdate.text = "Updated on " + getSqlToDDMMYYHHSS(repoModel?.updatedAt)
+            binding.tvStarCount.text = repoModel?.stargazers_count.toString()
+            binding.tvForkCount.text = repoModel?.forks_count.toString()
+            binding.tvLastUpdate.text = activity.resources.getString(R.string.updated_on) + getSqlToDDMMYYHHSS(repoModel?.updated_at)
 
 
-            try {
-                Picasso.get().load(repoModel?.ownerModel?.avatarUrl)
-                    .into(binding.civProfile, object : Callback {
-                        override fun onSuccess() {
-                            binding.civProfile.visibility = View.VISIBLE
-                        }
-
-                        override fun onError(e: java.lang.Exception?) {
-                            binding.civProfile.visibility = View.INVISIBLE
-                        }
-                    })
-            } catch (e: Exception) {
-                binding.civProfile.visibility = View.INVISIBLE
-            }
+//            try {
+//                Picasso.get().load(repoModel?.ownerModel?.avatarUrl)
+//                    .into(binding.civProfile, object : Callback {
+//                        override fun onSuccess() {
+//                            binding.civProfile.visibility = View.VISIBLE
+//                        }
+//
+//                        override fun onError(e: java.lang.Exception?) {
+//                            binding.civProfile.visibility = View.INVISIBLE
+//                        }
+//                    })
+//            } catch (e: Exception) {
+//                binding.civProfile.visibility = View.INVISIBLE
+//            }
         }
 
     }

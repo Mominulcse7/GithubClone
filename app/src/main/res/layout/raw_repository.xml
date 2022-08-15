@@ -27,7 +27,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civProfile"
@@ -63,6 +64,29 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvRepoName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:paddingStart="5dp"
+                android:paddingEnd="0dp"
+                android:paddingBottom="3dp"
+                android:text="@string/repository_name"
+                android:textColor="@color/cBlue"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvLastUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:paddingStart="5dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="0dp"
+                android:textSize="12sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,8 +94,8 @@
                 android:paddingEnd="5dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:contentDescription="@string/watchers_count"
                     android:src="@drawable/ic_star" />
 
@@ -79,15 +103,15 @@
                     android:id="@+id/tvStarCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="5dp"
+                    android:paddingStart="3dp"
                     android:paddingEnd="0dp"
                     android:text="@string/_0"
                     android:textColor="@color/cBlack"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_marginStart="15dp"
                     android:contentDescription="@string/fork_count"
                     android:src="@drawable/ic_route_fork" />
@@ -96,33 +120,13 @@
                     android:id="@+id/tvForkCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="5dp"
+                    android:paddingStart="3dp"
                     android:paddingEnd="0dp"
                     android:text="@string/_0"
                     android:textColor="@color/cBlack"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvLastUpdate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvRepoName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:paddingStart="5dp"
-                android:paddingEnd="0dp"
-                android:text="@string/repository_name"
-                android:textColor="@color/cBlue"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvDescription"

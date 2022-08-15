@@ -73,7 +73,9 @@ class RepoListFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (searchModel.totalPage > searchModel.currentPage) {
+                    if (searchModel.totalPage > searchModel.currentPage
+                        && searchModel.totalItem > listRepo.size
+                    ) {
                         loadList()
                     }
                 }
@@ -83,7 +85,7 @@ class RepoListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-
+        viewModel.application = activity.application
         viewModel.liveTotalItemCount.observe(viewLifecycleOwner) {
             searchModel.totalPage = it / searchModel.itemPerPage + 1
         }

@@ -1,8 +1,13 @@
 package com.mominulcse7.githubclone.features.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 class OwnerModel {
+
+    @PrimaryKey(autoGenerate = false)
     var id: Long? = 0L
 
     @SerializedName("login")

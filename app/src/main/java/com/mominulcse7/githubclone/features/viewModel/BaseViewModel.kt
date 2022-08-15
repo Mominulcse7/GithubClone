@@ -12,9 +12,7 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel : ViewModel() {
 
-    val isLoading = MutableLiveData<Boolean>()
     val networkError = MutableLiveData<String>()
-
     lateinit var application: Application
 
     //multipleParameter
@@ -28,7 +26,6 @@ open class BaseViewModel : ViewModel() {
         onResponseMethod: (response: U) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading.value = true
             try {
                 onResponseMethod(requesterMethod(parameter1, parameter2, parameter3, parameter4, parameter5))
             } catch (errorMsg: Throwable) {
@@ -37,7 +34,6 @@ open class BaseViewModel : ViewModel() {
                 Toast.makeText(application, errorMessage, Toast.LENGTH_LONG).show()
                 printApiResponse(errorMsg.localizedMessage)
             }
-            isLoading.value = false
         }
     }
 
@@ -47,14 +43,12 @@ open class BaseViewModel : ViewModel() {
         onResponseMethod: (response: U) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading.value = true
             try {
                 onResponseMethod(requesterMethod())
             } catch (errorMsg: Throwable) {
                 networkError.value = NetworkError.getServerResponseMessage(errorMsg, application)
                 printApiResponse(errorMsg.localizedMessage)
             }
-            isLoading.value = false
         }
     }
 

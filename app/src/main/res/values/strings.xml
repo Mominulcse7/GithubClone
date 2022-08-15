@@ -37,5 +37,6 @@
     <string name="fewest_forks">Fewest Forks</string>
     <string name="most_forks">Most Forks</string>
     <string name="fewest_star">Fewest Star</string>
+    <string name="updated_on">\"Updated on \"</string>
 
 </resources>

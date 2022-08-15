@@ -7,4 +7,5 @@ class SearchUrlModel {
     var sortBy = "stars"
     var orderBy = "desc"
     var totalPage = 1L
+    var totalItem = 0L
 }

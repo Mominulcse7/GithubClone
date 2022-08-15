@@ -15,13 +15,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
 
-    @Singleton
     @Provides
     fun providesRetrofit(): Retrofit.Builder {
 
@@ -48,7 +46,6 @@ class NetworkModule {
         return interceptor
     }
 
-    @Singleton
     @Provides
     fun providesUserAPI(retrofitBuilder: Retrofit.Builder): ApiService {
         return retrofitBuilder.build().create(ApiService::class.java)

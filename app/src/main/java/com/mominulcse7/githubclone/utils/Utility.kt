@@ -47,7 +47,7 @@ fun Activity.keyboardIsVisible(): Boolean {
     return isOpen
 }
 
-fun Activity.haveNetwork(): Boolean {
+fun Context.haveNetwork(): Boolean {
     val connectivityManager = getSystemService(Activity.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val network = connectivityManager.activeNetwork ?: return false

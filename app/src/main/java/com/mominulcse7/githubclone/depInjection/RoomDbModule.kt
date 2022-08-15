@@ -7,6 +7,7 @@ import com.mominulcse7.githubclone.utils.ConstantKeys.ROOM_DB_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -14,9 +15,8 @@ import javax.inject.Singleton
 @Module
 class RoomDbModule {
 
-    @Singleton
     @Provides
-    fun provideDatabase(context: Context): GithubDB {
-        return Room.databaseBuilder(context, GithubDB::class.java, ROOM_DB_NAME).build()
+    fun provideDatabase(@ApplicationContext context: Context): GithubDB {
+        return Room.databaseBuilder(context, GithubDB::class.java, ROOM_DB_NAME).fallbackToDestructiveMigration().build()
     }
 }

@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mominulcse7.githubclone.R
 import com.mominulcse7.githubclone.databinding.RawRepositoryBinding
 import com.mominulcse7.githubclone.features.model.RepositoryModel
+import com.mominulcse7.githubclone.utils.getSqlToDDMMYYHHSS
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
@@ -33,27 +35,28 @@ class RepoAdapter(private val onDetailsClicked: (RepositoryModel) -> Unit) :
 
         fun bind(model: RepositoryModel, position: Int) {
             with(binding) {
-                tvOwnerName.text = model.ownerModel?.name
-                tvOwnerDescription.text = model.ownerModel?.description
-                tvRepoName.text = model.fullName
+//                tvOwnerName.text = model.ownerModel?.name
+//                tvOwnerDescription.text = model.ownerModel?.description
+                tvRepoName.text = model.full_name
                 tvDescription.text = model.description
-                tvStarCount.text = model.starCount
-                tvForkCount.text = model.forksCount
+                tvStarCount.text = model.stargazers_count.toString()
+                tvForkCount.text = model.forks_count.toString()
+                tvLastUpdate.text = "Updated on " + getSqlToDDMMYYHHSS(model?.updated_at)
 
-                try {
-                    Picasso.get().load(model.ownerModel?.avatarUrl)
-                        .into(civProfile, object : Callback {
-                            override fun onSuccess() {
-                                civProfile.visibility = View.VISIBLE
-                            }
-
-                            override fun onError(e: java.lang.Exception?) {
-                                civProfile.visibility = View.INVISIBLE
-                            }
-                        })
-                } catch (e: Exception) {
-                    civProfile.visibility = View.INVISIBLE
-                }
+//                try {
+//                    Picasso.get().load(model.ownerModel?.avatarUrl)
+//                        .into(civProfile, object : Callback {
+//                            override fun onSuccess() {
+//                                civProfile.visibility = View.VISIBLE
+//                            }
+//
+//                            override fun onError(e: java.lang.Exception?) {
+//                                civProfile.visibility = View.INVISIBLE
+//                            }
+//                        })
+//                } catch (e: Exception) {
+//                    civProfile.visibility = View.INVISIBLE
+//                }
 
                 val listSize = itemCount
                 vExtraSpace.visibility = View.GONE

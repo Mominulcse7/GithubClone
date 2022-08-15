@@ -13,30 +13,30 @@ class RepositoryModel {
     var name: String? = ""
 
     @SerializedName("full_name")
-    var fullName: String? = ""
+    var full_name: String? = ""
 
     var description: String? = ""
     var language: String? = ""
 
     @SerializedName("created_at")
-    var createdAt: String? = ""
+    var created_at: String? = ""
 
     @SerializedName("updated_at")
-    var updatedAt: String? = ""
+    var updated_at: String? = ""
 
     @SerializedName("git_url")
-    var gitUrl: String? = ""
+    var git_url: String? = ""
 
     @SerializedName("watchers_count")
-    var watchersCount: String? = ""
+    var watchers_count: Long? = 0L
 
     @SerializedName("forks_count")
-    var forksCount: String? = ""
+    var forks_count: Long? = 0L
 
     @SerializedName("stargazers_count")
-    var starCount: String? = ""
+    var stargazers_count: Long? = 0L
 
-    @SerializedName("owner")
-    @Expose
-    var ownerModel: OwnerModel? = null
+//    @SerializedName("owner")
+//    @Expose
+//    var ownerModel: OwnerModel? = null
 }

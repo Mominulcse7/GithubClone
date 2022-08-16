@@ -44,9 +44,9 @@ fun Context.haveNetwork(): Boolean {
 
 fun getSqlToDDMMYYHHSS(inputDate: String?): String? {
     val dbFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-    val newFormat = SimpleDateFormat("dd-MM-yy hh:mm a", Locale.US)
+    val newFormat = SimpleDateFormat("MM-dd-yy hh:mm a", Locale.US)
     var strDateTime = inputDate
-    var date: Date? = null
+    val date: Date?
     try {
         date = inputDate?.let { dbFormat.parse(it) }
         strDateTime = date?.let { newFormat.format(it) }
